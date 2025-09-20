@@ -1,4 +1,5 @@
 import os
+import sys
 from dotenv import load_dotenv
 from google import genai
 
@@ -11,8 +12,13 @@ def main():
     #creating gemini client
     client = genai.Client(api_key=api_key)
 
+    system_args = sys.argv
+    if len(system_args) < 2:
+        print("No prompt provided. Restart and try again.")
+        quit(1)
+
     response = client.models.generate_content(
-        model='gemini-2.0-flash-001', contents='Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.'
+        model='gemini-2.0-flash-001', contents=" ".join(system_args[1:])
     )
     print(response.text)
 
